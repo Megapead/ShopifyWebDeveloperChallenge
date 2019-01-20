@@ -23,7 +23,8 @@ def index():
         for item in data:
             if item["keywords"] is not None:
                 keyword_string = item["keywords"]
-                keyword_list = keyword_string.split(",")
+                keyword_string = keyword_string.replace(',',' ')
+                keyword_list = keyword_string.split(' ')
                 print(keyword_list)
                 if request.form['itemname'] in keyword_list:
                     print(item["body"])

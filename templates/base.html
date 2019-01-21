@@ -25,6 +25,7 @@
   </table>
 </form>
 
+
 <table cellpadding=2>
 {% for item in table_search %}
 <tr>
@@ -32,8 +33,10 @@
   <img src="{{url_for('static',filename='images/unselected_star.png')}}" alt="Favourite" width="25" height="25" border="0">
   </td>
   <td><h3>{{item['title']}}</h3></td>
-  <td>{{item["markup"]|safe}}</td>
-</tr>
+  <td>
+  {{ item['body']|safe }} </td>
+  </tr>
 {% endfor %}
 </table>
+
 </html>

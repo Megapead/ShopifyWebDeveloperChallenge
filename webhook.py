@@ -2,8 +2,8 @@ from flask import Flask, request, url_for, session, flash, render_template, make
 import urllib3
 import json
 import sys
-from bs4 import BeautifulSoup
 import cgi
+import html
 
 app = Flask(__name__, template_folder = 'templates')
 app.config['SECRET_KEY'] = 'deve'
@@ -11,7 +11,8 @@ app.config['SECRET_KEY'] = 'deve'
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 def unicodeToHTMLEntities(text):
-    return cgi.escape(text).encode('ascii', 'xmlcharrefreplace')
+
+    return cgi.escape(text).encode('ascii', 'htmlcharrefreplace')
 
 
 @app.route('/SoftwareDeveloperChallenge', methods=['GET','POST'])
@@ -33,15 +34,14 @@ def index():
                 keyword_string = keyword_string.replace('-',' ')
                 keyword_list = keyword_string.split(' ')
                 if request.form['itemname'] in keyword_list:
-                    print('strike')
-                    item['markup'] = Markup(item['body'])
-                    print(isinstance(item['body'], str))
                     item["favourited"] = 'False'
+                    item['body'] = html.unescape(item['body'])
                     json_list.append(item)
+                    markup = Markup(item['body'])
 
         if json_list is not {}:
-            return render_template('base.html', table_search = json_list)
+            return render_template('base.html', table_search = json_list, mrkup = markup)
             #return json.dumps(json_list)
         else:
             return "Invalid search"
-    return render_template('base.html',table_search = [])
+    return render_template('base.html',table_search = [],mrkup = "blank")
